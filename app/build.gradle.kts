@@ -54,7 +54,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.hierynomus:sshj:0.38.0")
+    implementation("com.hierynomus:sshj:0.41.2")
     implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
     implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
     implementation("net.i2p.crypto:eddsa:0.3.0")
