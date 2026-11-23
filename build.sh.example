@@ -1,0 +1,10 @@
+#!/bin/bash
+B=/path/to/toolchain
+S="$(cd "$(dirname "$0")" && pwd)"
+export JAVA_HOME=$B/jdk17 ANDROID_HOME=$B/sdk ANDROID_USER_HOME=$B/sdk GRADLE_USER_HOME=$B/gradle-home
+export PATH=$B/jdk17/bin:$PATH
+echo "sdk.dir=$B/sdk" > $S/local.properties
+cd $S || exit 1
+./gradlew :app:assembleDebug --no-daemon --console=plain > $S/build.log 2>&1
+echo "BUILD_RC=$?" >> $S/build.log
+ls -la $S/app/build/outputs/apk/debug/ >> $S/build.log 2>&1

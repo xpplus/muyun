@@ -1,0 +1,13 @@
+牧云 (Muyun)
+Copyright 2026 xpplus
+
+本产品包含由以下项目提供的软件：
+- SSHJ (Apache-2.0)
+- Bouncy Castle (Bouncy Castle License)
+- EdDSA-Java (CC0-1.0)
+- OkHttp (Apache-2.0)
+- Kotlin / kotlinx.coroutines (Apache-2.0)
+- AndroidX / Jetpack Compose (Apache-2.0)
+- GitHub CLI (MIT)
+
+详见 docs/依赖许可.md

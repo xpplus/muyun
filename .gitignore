@@ -1,0 +1,35 @@
+# 构建产物
+build/
+app/build/
+.gradle/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# 本地配置（含 SDK 路径/签名信息，绝不提交）
+local.properties
+*.jks
+*.keystore
+signing.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 备份与临时文件
+*.bak
+*.bak-*
+*.orig
+*.rej
+*.log
+/tmp/
+
+# 系统
+.DS_Store
+Thumbs.db
+build.sh
+app/src/main/jniLibs/arm64-v8a/libgh.so
