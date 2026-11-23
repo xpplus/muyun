@@ -50,7 +50,7 @@ dependencies {
 
     implementation("org.jetbrains.compose.runtime:runtime:1.11.1")
     implementation("org.jetbrains.compose.ui:ui:1.11.1")
-    implementation("org.jetbrains.compose.foundation:foundation:1.11.1")
+    implementation("org.jetbrains.compose.foundation:foundation:1.12.2")
     implementation("androidx.compose.material3:material3:1.4.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
