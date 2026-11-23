@@ -59,5 +59,5 @@ dependencies {
     implementation("org.bouncycastle:bcpkix-jdk18on:1.78.1")
     implementation("net.i2p.crypto:eddsa:0.3.0")
     implementation("org.slf4j:slf4j-nop:2.0.13")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }
