@@ -145,6 +145,18 @@
 
 ---
 
+## 界面预览
+
+| 万机 | 灵枢 |
+|---|---|
+| ![万机](docs/screenshots/01-machines.jpg) | ![灵枢](docs/screenshots/05-terminal.jpg) |
+
+| 须弥 | 灵智 | 天道 |
+|---|---|---|
+| ![须弥](docs/screenshots/03-files.jpg) | ![灵智](docs/screenshots/04-ai.jpg) | ![天道](docs/screenshots/02-settings.jpg) |
+
+> 截图为脱敏示例：机器名与地址已替换或打码，仅展示界面结构。
+
 ## 界面结构
 
 底部 5 个 Tab：
