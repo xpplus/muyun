@@ -229,6 +229,14 @@ Kotlin 的属性和 `init` 块按书写顺序执行。曾经两次因为「`init
 
 ---
 
+## 下载
+
+- [**v1.0.0 测试版 APK**](https://github.com/xpplus/muyun/releases/tag/v1.0.0)（debug 签名，仅供测试）
+- SHA-256：
+- 系统要求：Android 8.0+ / arm64-v8a
+
+> 这是**不稳定版**，且为 debug 签名；请勿用于生产环境。
+
 ## 快速开始
 
 1. 安装 APK
