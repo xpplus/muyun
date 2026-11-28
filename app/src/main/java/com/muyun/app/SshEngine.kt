@@ -96,6 +96,16 @@ class SshEngine(private val ctx: Context) {
 
     private fun connectCodespaceOnce(codespace: String, token: String, keyFile: File, useProxy: Boolean = true) {
         val gh = Gh.bin(ctx)
+        // 关键：gh codespace ssh 会把 $HOME/.ssh 里的公钥注入 Codespaces。
+        // 之前只把密钥放在 App 私有目录，gh 的 HOME(=filesDir/ghhome) 下没有密钥，
+        // 导致服务器没有授权我们的公钥 → 认证阶段 Socket closed。
+        runCatching {
+            val sshDir = File(Gh.home(ctx), ".ssh").apply { mkdirs() }
+            File(sshDir, "id_rsa").writeBytes(keyFile.readBytes())
+            File(sshDir, "id_rsa.pub").writeText(
+                File(keyFile.parentFile, "id_rsa.pub").readText()
+            )
+        }
         val p = ProcessBuilder(
             gh.absolutePath, "codespace", "ssh", "-c", codespace,
             "--stdio", "--", "-i", keyFile.absolutePath
