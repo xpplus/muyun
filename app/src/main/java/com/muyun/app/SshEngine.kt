@@ -81,10 +81,12 @@ class SshEngine(private val ctx: Context) {
         var last: Throwable? = null
         repeat(3) { attempt ->
             try {
-                connectCodespaceOnce(codespace, token, keyFile)
+                // 第 2 次尝试走直连（不经 LocalProxy），排除代理层故障
+                connectCodespaceOnce(codespace, token, keyFile, useProxy = attempt != 1)
                 return
             } catch (t: Throwable) {
                 last = t
+                com.muyun.app.core.Diag.e("SSH", "codespace 连接失败 attempt=${attempt + 1}: ${t.message}")
                 close()
                 if (attempt < 2) Thread.sleep(8000)
             }
@@ -92,12 +94,12 @@ class SshEngine(private val ctx: Context) {
         throw last ?: IllegalStateException("连接失败")
     }
 
-    private fun connectCodespaceOnce(codespace: String, token: String, keyFile: File) {
+    private fun connectCodespaceOnce(codespace: String, token: String, keyFile: File, useProxy: Boolean = true) {
         val gh = Gh.bin(ctx)
         val p = ProcessBuilder(
             gh.absolutePath, "codespace", "ssh", "-c", codespace,
             "--stdio", "--", "-i", keyFile.absolutePath
-        ).apply { environment().putAll(Gh.env(ctx, token)) }
+        ).apply { environment().putAll(Gh.env(ctx, token, useProxy)) }
             .redirectErrorStream(false)
             .start()
         proc = p
@@ -123,7 +125,18 @@ class SshEngine(private val ctx: Context) {
 
         val c = newClient()
         c.connectTimeout = 45_000
-        c.connect("127.0.0.1", srv.localPort)
+        try {
+            c.connect("127.0.0.1", srv.localPort)
+        } catch (t: Throwable) {
+            Thread.sleep(300)
+            val detail = synchronized(ghErr) { ghErr.toString().trim() }
+            val state = if (p.isAlive) "gh 进程仍在运行" else runCatching { "gh 已退出 code=${p.exitValue()}" }.getOrDefault("gh 已退出")
+            com.muyun.app.core.Diag.e("SSH", "codespace 桥接失败: $state ${detail.take(300)}")
+            throw IllegalStateException(
+                (t.message ?: "连接失败") + "（$state）" +
+                    if (detail.isNotBlank()) "\ngh: ${detail.take(500)}" else ""
+            )
+        }
         // 不同 devcontainer 的 SSH 用户不同（常见 codespace / root / vscode），逐个尝试
         var authed = false
         var lastErr: Throwable? = null

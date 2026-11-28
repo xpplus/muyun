@@ -17,13 +17,15 @@ object Gh {
         return f
     }
 
-    fun env(ctx: Context, token: String): Map<String, String> {
-        val px = LocalProxy.start()
-        return mapOf(
-        "HTTPS_PROXY" to "http://127.0.0.1:$px",
-        "HTTP_PROXY" to "http://127.0.0.1:$px",
-        "ALL_PROXY" to "http://127.0.0.1:$px",
-        "NO_PROXY" to "127.0.0.1,localhost",
+    fun env(ctx: Context, token: String, useProxy: Boolean = true): Map<String, String> {
+        val px = if (useProxy) LocalProxy.start() else 0
+        val proxyPart = if (useProxy) mapOf(
+            "HTTPS_PROXY" to "http://127.0.0.1:$px",
+            "HTTP_PROXY" to "http://127.0.0.1:$px",
+            "ALL_PROXY" to "http://127.0.0.1:$px",
+            "NO_PROXY" to "127.0.0.1,localhost",
+        ) else emptyMap()
+        return proxyPart + mapOf(
         "HOME" to home(ctx).absolutePath,
         "GH_TOKEN" to token,
         "GH_CONFIG_DIR" to File(home(ctx), "config").apply { mkdirs() }.absolutePath,
