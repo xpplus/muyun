@@ -144,7 +144,9 @@ class SshEngine(private val ctx: Context) {
             com.muyun.app.core.Diag.e("SSH", "codespace 桥接失败: $state ${detail.take(300)}")
             throw IllegalStateException(
                 (t.message ?: "连接失败") + "（$state）" +
-                    if (detail.isNotBlank()) "\ngh: ${detail.take(500)}" else ""
+                    if (detail.isNotBlank()) "\ngh: ${detail.take(500)}" else "" +
+                    "\n\n提示：若镜像为自定义精简镜像，可能缺少 codespace 用户（UID 1000 + 免密 sudo），" +
+                    "见 docs/codespaces-custom-image.md"
             )
         }
         // 不同 devcontainer 的 SSH 用户不同（常见 codespace / root / vscode），逐个尝试
@@ -160,7 +162,10 @@ class SshEngine(private val ctx: Context) {
         if (!authed) {
             val detail = synchronized(ghErr) { ghErr.toString().trim() }
             throw IllegalStateException(
-                (lastErr?.message ?: "认证失败") + if (detail.isNotBlank()) "\ngh: $detail" else ""
+                (lastErr?.message ?: "认证失败") +
+                    if (detail.isNotBlank()) "\ngh: $detail" else "" +
+                    "\n\n提示：自定义精简镜像可能缺少 codespace 用户（UID 1000 + 免密 sudo）。\n" +
+                    "可在该 Codespace 的网页终端执行 docs/codespaces-custom-image.md 中的一键脚本，或改用官方镜像。"
             )
         }
         optimize(c)
